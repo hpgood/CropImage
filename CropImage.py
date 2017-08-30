@@ -50,6 +50,12 @@ def count_image(p):
     non_empty_rows = np.where(image_data_bw.max(axis=1)>0)[0]
     cropBox = (min(non_empty_rows), max(non_empty_rows), min(non_empty_columns), max(non_empty_columns))
     #print(p ,"last ->", last_cropBox)
+	
+	#cropBox[0] y1
+	#cropBox[1] y2
+	#cropBox[2] x1
+	#cropBox[3] x2
+	
     if not init_ins:
         last_cropBox=[cropBox[0],cropBox[1],cropBox[2],cropBox[3]]
         print("not init")
@@ -57,9 +63,9 @@ def count_image(p):
     else:
         if cropBox[0]<last_cropBox[0]:
             last_cropBox[0]=cropBox[0]
-        if cropBox[1]<last_cropBox[1]:
+        if cropBox[1]>last_cropBox[1]:
             last_cropBox[1]=cropBox[1]
-        if cropBox[2]>last_cropBox[2]:
+        if cropBox[2]<last_cropBox[2]:
             last_cropBox[2]=cropBox[2]
         if cropBox[3]>last_cropBox[3]:
             last_cropBox[3]=cropBox[3]

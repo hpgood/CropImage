@@ -32,7 +32,7 @@ def crop_image(p):
     image.load()
     image_data = np.asarray(image)
     cropBox = last_cropBox
-    print("->", cropBox)
+    print("->%s " % p)
     image_data_new = image_data[cropBox[0]:cropBox[1] + 1, cropBox[2]:cropBox[3] + 1, :]
 
     new_image = Image.fromarray(image_data_new)

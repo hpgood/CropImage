@@ -8,7 +8,7 @@ except ImportError:
 import os,sys
 import numpy as np
 
-last_cropBox=np.array([0,0,0,0])
+last_cropBox=[0,0,0,0]
 init_ins=False
 
 def auto_crop_image(p):
@@ -32,7 +32,7 @@ def crop_image(p):
     image.load()
     image_data = np.asarray(image)
     cropBox = last_cropBox
-    #print("->", cropBox)
+    print("->", cropBox)
     image_data_new = image_data[cropBox[0]:cropBox[1] + 1, cropBox[2]:cropBox[3] + 1, :]
 
     new_image = Image.fromarray(image_data_new)
@@ -49,20 +49,23 @@ def count_image(p):
     non_empty_columns = np.where(image_data_bw.max(axis=0)>0)[0]
     non_empty_rows = np.where(image_data_bw.max(axis=1)>0)[0]
     cropBox = (min(non_empty_rows), max(non_empty_rows), min(non_empty_columns), max(non_empty_columns))
-    #print( "last ->", last_cropBox)
+    #print(p ,"last ->", last_cropBox)
     if not init_ins:
-        last_cropBox=cropBox
+        last_cropBox=[cropBox[0],cropBox[1],cropBox[2],cropBox[3]]
+        print("not init")
+        init_ins=True
     else:
         if cropBox[0]<last_cropBox[0]:
             last_cropBox[0]=cropBox[0]
-        if cropBox[1]>last_cropBox[1]:
+        if cropBox[1]<last_cropBox[1]:
             last_cropBox[1]=cropBox[1]
-        if cropBox[2]<last_cropBox[2]:
+        if cropBox[2]>last_cropBox[2]:
             last_cropBox[2]=cropBox[2]
         if cropBox[3]>last_cropBox[3]:
             last_cropBox[3]=cropBox[3]
 
-    #print(cropBox,"->",last_cropBox)
+    print(cropBox,"->",last_cropBox)
+    #print(  last_cropBox)
 
 def list_dir(dir, filter=None):
     list = os.listdir(dir)  # 列出目录下的所有文件和目录
@@ -73,7 +76,7 @@ def list_dir(dir, filter=None):
         if line.find(".png")!=-1:
             count_image(dir + '/' + line)
     global last_cropBox
-    print("rect:",last_cropBox)
+    print("use rect:",last_cropBox)
     for line in list:
         #print(line,",", line.find(".png"))
         if line.find(".png")!=-1:
